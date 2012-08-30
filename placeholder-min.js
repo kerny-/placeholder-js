@@ -1,0 +1,2 @@
+//author: Kerny, version: 1.0, last update: 2012-08-30, site: http:/kerny.ru/
+window.onload=function(){var b,a;b=document.getElementsByTagName("input");for(a=0;a<b.length;a++){b[a].onfocus=function(){var a=this.getAttribute("placeholder");this.value==a&&this.setAttribute("value","")};b[a].onblur=function(){var a=this.getAttribute("placeholder"),b=this.value;(null==b||""==b)&&this.setAttribute("value",a)};var d=b[a].getAttribute("placeholder"),c=b[a].value;null==c||""==c?b[a].setAttribute("value",d):b[a].setAttribute("value",c)}};
