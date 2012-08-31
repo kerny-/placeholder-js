@@ -8,20 +8,20 @@
  */
 
 window.onload = function() {
-    var inputs, textareas, length, i;
-    inputs = document.getElementsByTagName("input");
-    textareas = document.getElementsByTagName("textarea");
+    var elements, elementTagsLength, i,j,
     
-    length = inputs.length;
-    for (i = 0; i < length; i++) {       
-        events(inputs[i]);        
-        onBlur(inputs[i]);
+    elementTags = new Array("input","textarea");    
+    elementTagsLength = elementTags.length;   
+    
+    for(i = 0; i < elementTagsLength; i++){        
+        elements = document.getElementsByTagName(elementTags[i]);
+        var length = elements.length;
+        
+        for (j = 0; j < length; j++) {       
+            events(elements[j]);        
+            onBlur(elements[j]);
+        }        
     }    
-    length = textareas.length;
-    for (i = 0; i < length; i++) {
-        events(textareas[i]);     
-        onBlur(textareas[i]);        
-    }
 };
 
 function events(element){
