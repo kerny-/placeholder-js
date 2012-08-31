@@ -3,37 +3,49 @@
  * IE 5.5 +, Opera+, Firefox+ and other
  * @author Kerny
  * @site http:/kerny.ru/
- * @date 2012-08-31
- * @version 1.0.2 
+ * @date 2012-09-01
+ * @version 1.0.3 
  */
 
 var EMPTY="",
-    elementTags = new Array("input","textarea");
+elementTags = new Array("input","textarea");
+    
+function supportPlaceholder() {
+    var support = document.createElement('input');
+    return 'placeholder' in support;
+}
 
 window.onload = function() {
-    var elements, length, i,j, flag,    
-    elementTagsLength = elementTags.length;     
+    if (supportPlaceholder()==false) {
+        var elements, length, i,j, flag,    
+        elementTagsLength = elementTags.length;     
     
-    for(i = 0; i < elementTagsLength; i++){   
+        for(i = 0; i < elementTagsLength; i++){   
         
-        elements = document.getElementsByTagName(elementTags[i]);
-        length = elements.length;
+            elements = document.getElementsByTagName(elementTags[i]);
+            length = elements.length;
         
-        for (j = 0; j < length; j++) {   
-            flag = elements[j].getAttribute("placeholder");
-            if(flag!=null && flag!=EMPTY){
-                events(elements[j]);        
-                onBlur(elements[j]);
-            }
-            
-            flag = elements[j].getAttribute("type");
-            if(flag=="submit"){
-                elements[j].onclick = function() { 
-                    onSubmit(this);            
-                }   
-            }
-        }        
-    }    
+            for (j = 0; j < length; j++) {   
+                                
+                flag = elements[j].getAttribute("type");
+                if(flag=="submit"){
+                    elements[j].onclick = function() { 
+                        onSubmit(this);            
+                    }   
+                }                
+                if (flag=="password") {                   
+                    elements[j].setAttribute("type", "text");                                       
+                    elements[j].setAttribute("data-type", "password");                                        
+                }
+                
+                flag = elements[j].getAttribute("placeholder");
+                if(flag!=null && flag!=EMPTY){
+                    events(elements[j]);        
+                    onBlur(elements[j]);
+                }
+            }        
+        } 
+    }
 };
 
 function events(element){
@@ -49,6 +61,10 @@ function onBlur(elemEvent){
     var placeholder=elemEvent.getAttribute("placeholder"),
     value=elemEvent.value;
     if(value==null || value==EMPTY){
+        var type = elemEvent.getAttribute("data-type");
+        if (type!=null){
+            elemEvent.setAttribute("type", "text");            
+        }        
         elemEvent.value= placeholder;
     }    
 }
@@ -57,6 +73,10 @@ function onFocus(elemEvent) {
     var placeholder=elemEvent.getAttribute("placeholder"),
     value=elemEvent.value;
     if(value==placeholder){
+        var type = elemEvent.getAttribute("data-type");
+        if (type!=null){
+            elemEvent.setAttribute("type", type);  
+        }
         elemEvent.value=EMPTY;  
     }      
 }
