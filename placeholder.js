@@ -15,36 +15,25 @@ window.onload = function() {
     length = inputs.length;
     for (i = 0; i < length; i++) {       
         events(inputs[i]);        
-        initialValue(inputs[i]);
+        onBlur(inputs[i]);
     }    
     length = textareas.length;
     for (i = 0; i < length; i++) {
         events(textareas[i]);     
-        initialValue(textareas[i]);        
+        onBlur(textareas[i]);        
     }
 };
 
 function events(element){
     element.onfocus = function() { 
-        valueClean(this);            
+        onFocus(this);            
     }   
     element.onblur = function() { 
-        placeholderToValue(this);            
+        onBlur(this);            
     }       
 }
 
-function initialValue(element) {
-    var placeholder=element.getAttribute("placeholder"),
-    value=element.value;
-
-    if (value==null || value==""){
-        element.value = placeholder;
-    } else {
-        element.value = value;
-    }    
-}
-
-function placeholderToValue(elemEvent){   
+function onBlur(elemEvent){   
     var placeholder=elemEvent.getAttribute("placeholder"),
     value=elemEvent.value;
     if(value==null || value==""){
@@ -52,7 +41,7 @@ function placeholderToValue(elemEvent){
     }    
 }
 
-function  valueClean(elemEvent) {
+function onFocus(elemEvent) {
     var placeholder=elemEvent.getAttribute("placeholder"),
     value=elemEvent.value;
     if(value==placeholder){
