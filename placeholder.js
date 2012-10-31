@@ -3,8 +3,8 @@
  * IE 5.5 +, Opera+, Firefox+ and other
  * @author Kerny
  * @site http:/kerny.ru/
- * @date 2012-09-01
- * @version 1.0.3 
+ * @date 2012-10-05
+ * @version 1.0.4 
  */
 
 var EMPTY="",
@@ -15,7 +15,7 @@ function supportPlaceholder() {
     return 'placeholder' in support;
 }
 
-window.onload = function() {
+bindReady(function() {
     if (supportPlaceholder()==false) {
         var elements, length, i,j, flag,    
         elementTagsLength = elementTags.length;     
@@ -46,7 +46,7 @@ window.onload = function() {
             }        
         } 
     }
-};
+});
 
 function events(element){
     element.onfocus = function() { 
@@ -100,4 +100,54 @@ function onSubmit() {
             }
         }    
     }
+}
+
+function bindReady(handler){
+
+    var called = false
+
+    function ready() { // (1)
+        if (called) return
+        called = true
+        handler()
+    }
+
+    if ( document.addEventListener ) { // (2)
+        document.addEventListener( "DOMContentLoaded", function(){
+            ready()
+        }, false )
+    } else if ( document.attachEvent ) {  // (3)
+
+        // (3.1)
+        if ( document.documentElement.doScroll && window == window.top ) {
+            function tryScroll(){
+                if (called) return
+                if (!document.body) return
+                try {
+                    document.documentElement.doScroll("left")
+                    ready()
+                } catch(e) {
+                    setTimeout(tryScroll, 0)
+                }
+            }
+            tryScroll()
+        }
+
+        // (3.2)
+        document.attachEvent("onreadystatechange", function(){
+
+            if ( document.readyState === "complete" ) {
+                ready()
+            }
+        })
+    }
+
+    // (4)
+    if (window.addEventListener)
+        window.addEventListener('load', ready, false)
+    else if (window.attachEvent)
+        window.attachEvent('onload', ready)
+/*  else  // (4.1)
+        window.onload=ready
+	*/
 }
