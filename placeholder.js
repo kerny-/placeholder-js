@@ -3,20 +3,22 @@
  * IE 5.5 +, Opera+, Firefox+ and other
  * @author Kerny
  * @site http:/kerny.ru/
- * @date 2012-10-05
- * @version 1.0.4 
+ * @date 2013-05-20
+ * @version 1.0.5 
  */
 
 var EMPTY="",
-elementTags = new Array("input","textarea");
+    placeholderClass = "-js-placeholder";
+    issupportPlaceholder = supportPlaceholder();
+    elementTags = new Array("input","textarea");
     
 function supportPlaceholder() {
-    var support = document.createElement('input');
-    return 'placeholder' in support;
+    var support = document.createElement("input");
+    return "placeholder" in support;
 }
 
 bindReady(function() {
-    if (supportPlaceholder()==false) {
+    if (issupportPlaceholder==false) {
         var elements, length, i,j, flag,    
         elementTagsLength = elementTags.length;     
     
@@ -40,13 +42,19 @@ bindReady(function() {
                 
                 flag = elements[j].getAttribute("placeholder");
                 if(flag!=null && flag!=EMPTY){
-                    events(elements[j]);        
-                    onBlur(elements[j]);
+                    placeholderIni(elements[j]);
                 }
             }        
         } 
     }
 });
+
+function placeholderIni(element){
+    if(issupportPlaceholder==false){
+        events(element);
+        onBlur(element);
+    }
+}
 
 function events(element){
     element.onfocus = function() { 
@@ -65,6 +73,7 @@ function onBlur(elemEvent){
         if (type!=null){
             elemEvent.setAttribute("type", "text");            
         }        
+        elemEvent.className = elemEvent.className + ' ' + placeholderClass;        
         elemEvent.value= placeholder;
     }    
 }
@@ -77,7 +86,8 @@ function onFocus(elemEvent) {
         if (type!=null){
             elemEvent.setAttribute("type", type);  
         }
-        elemEvent.value=EMPTY;  
+        elemEvent.className= elemEvent.className.replace(new RegExp(placeholderClass,'g'), EMPTY);
+        elemEvent.value = EMPTY; 
     }      
 }
 
@@ -106,19 +116,18 @@ function bindReady(handler){
 
     var called = false
 
-    function ready() { // (1)
+    function ready() {
         if (called) return
         called = true
         handler()
     }
 
-    if ( document.addEventListener ) { // (2)
+    if ( document.addEventListener ) {
         document.addEventListener( "DOMContentLoaded", function(){
             ready()
         }, false )
-    } else if ( document.attachEvent ) {  // (3)
+    } else if ( document.attachEvent ) {
 
-        // (3.1)
         if ( document.documentElement.doScroll && window == window.top ) {
             function tryScroll(){
                 if (called) return
@@ -132,22 +141,14 @@ function bindReady(handler){
             }
             tryScroll()
         }
-
-        // (3.2)
         document.attachEvent("onreadystatechange", function(){
-
             if ( document.readyState === "complete" ) {
                 ready()
             }
         })
     }
-
-    // (4)
     if (window.addEventListener)
         window.addEventListener('load', ready, false)
     else if (window.attachEvent)
         window.attachEvent('onload', ready)
-/*  else  // (4.1)
-        window.onload=ready
-	*/
 }

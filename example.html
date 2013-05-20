@@ -3,18 +3,61 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Placeholder - example</title>
-	<script type="text/JavaScript" src="placeholder-min.js"></script> 
+    <script type="text/JavaScript" src="placeholder.js"></script> 
+    <style type="text/css">
+        body{
+            font-family: Arial;
+        }
+        input, textarea, form > b{
+            display: block;
+        }
+        form > b{
+            margin: 10px 0;
+        }
+        .styler.-js-placeholder{
+            color: red;
+            font-style: italic;
+        }
+        .styler::-moz-placeholder {
+            color: red;
+            font-style: italic;            
+        }
+        .styler::-webkit-input-placeholder{
+            color: red;
+            font-style: italic;            
+        }
+    </style>
 </head>
  <body>
      <h1>Placeholder - example</h1>
-     <p><b>placeholder-js</b> - Emulation placeholder in older browsers that do not support html5.
-     <form action="ss" method="post">
- 		<input placeholder="example text-1"/><br>
- 		<input placeholder="example text-2"/><br>
- 		<input placeholder="example text-3"/><br>
-                <input type="password" placeholder="example text-4"/><br>                     
-                <textarea placeholder="textarea text"></textarea><br>  
-                <input type="submit"/>    
+     <p>
+        <b>placeholder-js 2.0</b> - Emulation placeholder in older browsers that do not support html5.
+     <form id="form" action="ss" method="post">
+        <b>Default placeholder</b>
+ 		<input placeholder="example text-1"/> 		
+ 		<input placeholder="example text-2"/>
+        <b>Stylized placeholder</b>
+        <input class="styler" placeholder="example text-3"/>
+        <input class="styler" placeholder="example text-4"/>
+        <b>Input type="password"</b>
+        <input type="password" placeholder="example text-5"/> 
+        <b>Textarea placeholder</b>
+        <textarea placeholder="textarea text"></textarea>
+        <b>Dynamically element placeholder</b>
+
  	</form>
+        <button onclick="addInput();">Add input</button>
+    
+     	<script type="text/javascript">
+            function addInput(){
+                var newInput = document.createElement('input'),
+                    form = document.getElementById('form');
+
+                newInput.setAttribute('placeholder', 'example dynamically input');            
+                // initialization placeholder for the new input
+                placeholderIni(newInput);
+                form.appendChild(newInput);
+            }
+    	</script>
  </body>
 </html>
